@@ -3,31 +3,155 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+    --foreground-rgb: 0, 0, 0;
+    --background-start-rgb: 214, 219, 220;
+    --background-end-rgb: 255, 255, 255;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+    :root {
+        --foreground-rgb: 255, 255, 255;
+        --background-start-rgb: 0, 0, 0;
+        --background-end-rgb: 0, 0, 0;
+    }
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+    color: white
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+    .text-balance {
+        text-wrap: balance;
+    }
 }
+
+
+/* Menu ITEMS */
+.menuItems {
+    @apply px-[0.700rem] py-[1.25rem] cursor-pointer hover:text-primary
+}
+
+.secondMenuItems {
+    @apply px-[0.500rem] cursor-pointer hover:text-primary transition-all
+}
+
+.navBarMenu {
+    @apply sm:static absolute top-0 left-0 grid place-content-center sm:w-auto sm:h-auto w-full h-full sm:text-white text-black sm:bg-transparent bg-white uppercase
+}
+
+
+/* Buttons */
+.btn-primary {
+    @apply text-white md:px-[1.875rem] px-[0.7rem] justify-center text-center items-center py-[0.5rem] bg-primary rounded-3xl cursor-pointer hover:opacity-70 hover:text-secondary transition-all sm:inline-block hidden font-sans
+}
+
+.btn-secondary {
+    @apply active:bg-secondary active:rounded-3xl active:text-white bg-white text-secondary px-6 py-2
+}
+
+.btn-product {
+    @apply text-white px-[0.7rem] w-10 h-10 justify-center text-center items-center bg-primary rounded-3xl cursor-pointer hover:opacity-70 hover:text-secondary transition-all inline-block font-sans
+}
+
+.btn-form {
+    @apply text-white md:px-[1.875rem] px-[0.7rem] justify-center text-center items-center py-[0.5rem] bg-primary rounded-3xl cursor-pointer hover:opacity-70 hover:text-secondary transition-all inline-block font-sans !min-w-40
+}
+
+.btn-form-github {
+    @apply text-white md:px-[1.875rem] px-[0.7rem] justify-center text-center items-center py-[0.5rem] bg-secondary rounded-3xl cursor-pointer hover:opacity-70 hover:text-primary transition-all font-sans
+}
+
+.btn-profile {
+    @apply w-full text-secondary md:px-[1.875rem] px-[0.7rem] justify-start text-center items-center py-[0.5rem] cursor-pointer hover:opacity-70 hover:text-white hover:bg-primary transition-all font-sans flex gap-x-4 border-t-[1px] border-primary
+}
+.btn-profile.active {
+    @apply w-full md:px-[1.875rem] px-[0.7rem] justify-start text-center items-center py-[0.5rem] cursor-pointer hover:opacity-70 hover:text-white hover:bg-primary transition-all font-sans flex gap-x-4 border-t-[1px] border-primary bg-primary text-white
+}
+
+/* Search Modal */
+.searchModal {
+    @apply fixed top-0 left-0 w-screen h-screen z-50 after:content-[''] after:w-screen after:h-screen after:bg-black after:absolute after:top-0 after:left-0 grid place-content-center after:opacity-50 after:transition-all
+}
+
+.searchModalContent {
+    @apply text-white relative z-50 md:w-[50rem] w-[23rem] bg-secondary rounded-3xl text-center p-5
+}
+
+.modalTitle {
+    @apply font-dancing font-bold  text-[40px]
+}
+
+.modalInputs {
+    @apply
+    w-full h-[75px]
+    font-dancing
+    text-[2.5rem]
+    placeholder:italic
+    placeholder:font-dancing
+    placeholder:text-[2.5rem]
+    placeholder:opacity-30
+    placeholder:p-5
+    block
+    bg-white
+    border
+    border-primary
+    rounded-md
+    py-2 pl-9 pr-3
+    shadow-sm
+    focus:outline-none
+    focus:border-sky-500
+    focus:ring-sky-500
+    focus:ring-1
+    text-secondary
+    border-primary
+}
+
+.searchModalResults {
+
+}
+
+.searchModalResultsWrapper {
+    @apply p-10 pt-20
+}
+
+.searchModalResultsItems {
+    @apply w-full flex items-center justify-between hover:bg-primary hover:rounded-xl px-5 py-2 transition-all cursor-pointer
+}
+
+.searchModalResultsItems > span {
+    @apply font-bold text-2xl text-white font-dancing
+}
+
+
+/* IMAGE */
+
+.image {
+    @apply w-[4rem] h-[4rem] relative
+}
+
+/* SLIDER */
+
+.slick-dots {
+    @apply !flex w-full justify-start align-middle flex-wrap
+}
+
+.slick-slider-dots {
+    @apply w-3 h-3 border bg-white rounded-full mt-10
+}
+
+.slick-dots .slick-active div {
+    @apply bg-primary w-4 h-4 transition-all ease-in-out
+}
+
+.slick-dots li {
+    @apply !ml-0
+}
+
+
+/* PRODUCT */
+.productDetailsSizeSpan {
+    @apply absolute top-0 -right-6 text-[9px] bg-primary rounded-md text-white px-[5px] font-medium z-50 cursor-pointer
+}
+
+
