@@ -1,4 +1,4 @@
-import React from "react"
+import React, {useEffect} from "react"
 import {useState} from 'react';
 import Image from 'next/image';
 import Title from "@/components/ui/Title";
@@ -6,9 +6,33 @@ import {FaUserAstronaut, FaKey, FaJediOrder, FaDoorOpen} from "react-icons/fa";
 import Account from "@/components/profile/Account";
 import Password from "@/components/profile/Password";
 import Orders from "@/components/profile/Orders";
+import {toast} from "react-toastify";
+import {getSession, signOut, useSession} from "next-auth/react";
+import {useRouter} from "next/router";
+import {redirect} from "next/navigation";
 
 const Index = () => {
     const [tabs, setTabs] = useState(0);
+    const {push} = useRouter();
+    const {data: session} = useSession()
+    const exitProfile = async () => {
+        if (confirm("Are you sure to EXIT from your account?")) {
+            signOut({redirect: false}).then(async () => {
+                toast.success("Logging out successful");
+                await new Promise((resolve) => setTimeout(resolve, 4000));
+                push("/auth/login")
+            })
+        }
+    }
+    // getSession'ı getServerSideProps'ile aldığımızdan dolayı buna ihtiyacımız kalmadı.
+    /*useEffect(() => {
+        return () => {
+            if (!session) {
+                push("/auth/login")
+            }
+        };
+    }, [session, push]);*/
+
 
     return (
         <div className="min-h-[calc(100vh_-_620px)] lg:m-14 m-6 flex lg:flex-row flex-col lg:gap-x-16 gap-x-6 flex-1">
@@ -23,13 +47,17 @@ const Index = () => {
                     <Title addedClass="font-dancing text-xl">Alihan AÇIKGÖZ</Title>
                 </div>
                 <div className="flex flex-col w-full">
-                    <button className={`btn-profile ${tabs===0&&"active"}`} onClick={() => setTabs(0)}><FaUserAstronaut className="text-xl"/>Account
+                    <button className={`btn-profile ${tabs === 0 && "active"}`} onClick={() => setTabs(0)}>
+                        <FaUserAstronaut className="text-xl"/>Account
                     </button>
-                    <button className={`btn-profile ${tabs===1&&"active"}`} onClick={() => setTabs(1)}><FaKey className="text-xl"/>Password
+                    <button className={`btn-profile ${tabs === 1 && "active"}`} onClick={() => setTabs(1)}><FaKey
+                        className="text-xl"/>Password
                     </button>
-                    <button className={`btn-profile ${tabs===2&&"active"}`} onClick={() => setTabs(2)}><FaJediOrder className="text-xl"/>Orders
+                    <button className={`btn-profile ${tabs === 2 && "active"}`} onClick={() => setTabs(2)}><FaJediOrder
+                        className="text-xl"/>Orders
                     </button>
-                    <button className={`btn-profile ${tabs===3&&"active"}`} onClick={() => setTabs(3)}><FaDoorOpen className="text-xl"/>Çıkış
+                    <button className={`btn-profile ${tabs === 3 && "active"}`} onClick={() => exitProfile()}>
+                        <FaDoorOpen className="text-xl"/>Çıkış
                     </button>
                 </div>
             </div>
@@ -52,5 +80,22 @@ const Index = () => {
         </div>
     );
 };
+
+export const getServerSideProps = async ({req}) => {
+    const session = await getSession({req})
+
+    if (!session) {
+        return {
+            redirect: {
+                destination: "/auth/login",
+                permanent: false
+            }
+        }
+    }
+    return {
+        props: {}
+    }
+}
+
 
 export default Index;

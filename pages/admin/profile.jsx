@@ -2,8 +2,8 @@ import {useState} from 'react';
 import Image from 'next/image';
 import Title from "@/components/ui/Title";
 import {FaProductHunt, FaJediOrder, FaDoorOpen} from "react-icons/fa";
-import { MdCategory } from "react-icons/md";
-import { GiFootprint } from "react-icons/gi";
+import {MdCategory} from "react-icons/md";
+import {GiFootprint} from "react-icons/gi";
 import Products from "@/components/admin/Products";
 import Orders from "@/components/admin/Orders";
 import Categories from "@/components/admin/Categories";
@@ -19,15 +19,25 @@ const Profile = () => {
     const exitAdmin = async () => {
         try {
             if (confirm("Are you sure to EXIT from Admin Account?")) {
-                const res = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/admin`);
-                if (res.status === 200) {
-                    push("/admin");
-                    toast.success("Exit successful.");
+                try {
+                    const res = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/admin`);
+                    if (res.status === 200) {
+                        push("/admin");
+                        toast.success("Exit successful.");
+                    } else {
+                        toast.error("Exit failed.");
+                    }
+                } catch (error) {
+                    if (error) {
+                        toast.error(error.response.data.message);
+                    }
                 }
             }
 
         } catch (err) {
-
+            if (err) {
+                toast.error("Exit failed. "+err.response.data.message);
+            }
         }
     }
 
@@ -44,15 +54,20 @@ const Profile = () => {
                     <Title addedClass="font-dancing text-xl">Alihan AÇIKGÖZ</Title>
                 </div>
                 <div className="flex flex-col w-full">
-                    <button className={`btn-profile ${tabs===0&&"active"}`} onClick={() => setTabs(0)}><FaProductHunt className="text-xl"/>Products
+                    <button className={`btn-profile ${tabs === 0 && "active"}`} onClick={() => setTabs(0)}>
+                        <FaProductHunt className="text-xl"/>Products
                     </button>
-                    <button className={`btn-profile ${tabs===1&&"active"}`} onClick={() => setTabs(1)}><FaJediOrder className="text-xl"/>Orders
+                    <button className={`btn-profile ${tabs === 1 && "active"}`} onClick={() => setTabs(1)}><FaJediOrder
+                        className="text-xl"/>Orders
                     </button>
-                    <button className={`btn-profile ${tabs===2&&"active"}`} onClick={() => setTabs(2)}><MdCategory className="text-xl"/>Categories
+                    <button className={`btn-profile ${tabs === 2 && "active"}`} onClick={() => setTabs(2)}><MdCategory
+                        className="text-xl"/>Categories
                     </button>
-                    <button className={`btn-profile ${tabs===3&&"active"}`} onClick={() => setTabs(3)}><GiFootprint className="text-xl"/>Footer
+                    <button className={`btn-profile ${tabs === 3 && "active"}`} onClick={() => setTabs(3)}><GiFootprint
+                        className="text-xl"/>Footer
                     </button>
-                    <button className={`btn-profile ${tabs===4&&"active"}`} onClick={exitAdmin}><FaDoorOpen className="text-xl"/>Çıkış
+                    <button className={`btn-profile ${tabs === 4 && "active"}`} onClick={exitAdmin}><FaDoorOpen
+                        className="text-xl"/>Çıkış
                     </button>
                 </div>
             </div>
@@ -83,15 +98,15 @@ export const getServerSideProps = async (context) => {
 
     if (myCookieProfile.token !== process.env.ADMIN_TOKEN) {
         return {
-            redirect:{
-                destination:"/admin",
-                permanent:false
+            redirect: {
+                destination: "/admin",
+                permanent: false
             }
         }
     }
 
     return {
-        props:{}
+        props: {}
     }
 }
 

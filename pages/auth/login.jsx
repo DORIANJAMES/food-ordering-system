@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Title from "@/components/ui/Title";
 import Input from "@/components/ui/Input";
 import {useFormik} from 'formik';
@@ -7,24 +7,39 @@ import {FaGithub} from "react-icons/fa";
 import Link from "next/link";
 import {useSession, signIn} from "next-auth/react";
 import {toast} from "react-toastify";
+import {useRouter} from "next/router";
 
 
 const Login = () => {
     const {data: session} = useSession()
+    const {push} = useRouter()
 
     const onSubmit = async (values, actions) => {
         const {email, password} = values
-        let options = {redirect: false, email,password};
-        const res = await signIn('credentials', options)
-        if (res.status === 200) {
-            toast.success("Login Successful");
-            actions.resetForm();
-        }
-        else {
-            toast.error("Login Failed")
-            actions.resetForm();
+        let options = {redirect: false, email, password};
+        try {
+            const res = await signIn('credentials', options)
+            if (res.status === 200) {
+                toast.success("Login Successful");
+                actions.resetForm();
+            } else {
+                toast.error("Login Failed")
+                actions.resetForm();
+            }
+        } catch (error) {
+            if (error) {
+                toast.error("Error: "+error.response.date.message)
+            }
         }
     }
+
+    useEffect(() => {
+        if (session) {
+            push("/profile")
+        }
+
+    }, [session, push]);
+
 
     console.log(session)
 

@@ -6,8 +6,11 @@ import {registerSchema} from "@/schema/register";
 import Link from "next/link";
 import axios from "axios";
 import {toast} from "react-toastify";
+import {useRouter} from "next/router";
+import {signIn} from "next-auth/react";
 
 const Register = () => {
+    const {push} = useRouter()
 
     const {values, errors, touched, handleChange, handleSubmit, handleBlur} = useFormik({
         initialValues: {
@@ -21,7 +24,17 @@ const Register = () => {
                 const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/users/register`, values);
                 if (res.status ===200) {
                     toast.success("User Registered Successfully");
-                    actions.resetForm();
+                    const {email,password} = values
+                    const options = {redirect:false,email,password}
+                    const user = await signIn('credentials', options)
+                    if (user.status === 200) {
+                        toast.success("Sign in completed.");
+                        actions.resetForm()
+                        push("/profile")
+                    }
+
+                    /*actions.resetForm();
+                    push("/auth/login")*/
                 } else {
                     toast.error("User Registration Failed");
                     actions.resetForm();
