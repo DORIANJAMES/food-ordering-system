@@ -2,21 +2,30 @@ import React from 'react';
 import Input from "@/components/ui/Input";
 import {useFormik} from "formik";
 import {profileSchema} from "@/schema/profile";
+import axios from "axios";
+import {useRouter} from "next/router";
 
-const Account = () => {
+const Account = ({user}) => {
+    const {push} = useRouter();
     const onSubmit = async (values, actions) => {
-        alert(JSON.stringify(values, null, 2))
-        await new Promise((resolve) => setTimeout(resolve, 4000))
-        actions.resetForm()
+        /*alert(JSON.stringify(values, null, 2))
+        await new Promise((resolve) => setTimeout(resolve, 4000))*/
+        try {
+            const res = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/users/${user._id}`, values);
+            push("/profile/"+user._id);
+        } catch (error) {
+            console.log(error)
+        }
+
     }
     const {values, errors, touched, handleChange, handleSubmit, handleBlur} = useFormik({
         initialValues: {
-            fullName: "",
-            email: "",
-            phone: "",
-            address: "",
-            job: "",
-            bio: "",
+            fullName: user?.fullName,
+            email: user?.email,
+            phone: user?.phone,
+            address: user?.address,
+            job: user?.job,
+            bio: user?.bio,
         },
         onSubmit,
         validationSchema: profileSchema,

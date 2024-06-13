@@ -1,18 +1,21 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import Title from "@/components/ui/Title";
 import Input from "@/components/ui/Input";
 import {useFormik} from 'formik';
 import {loginSchema} from "@/schema/login";
 import {FaGithub} from "react-icons/fa";
 import Link from "next/link";
-import {useSession, signIn} from "next-auth/react";
+import {useSession, signIn, getSession} from "next-auth/react";
 import {toast} from "react-toastify";
 import {useRouter} from "next/router";
+import axios from "axios";
 
 
-const Login = () => {
+const Login = ({user}) => {
     const {data: session} = useSession()
     const {push} = useRouter()
+    const [currentUser, setCurrentUser] = useState();
+    console.log(user)
 
     const onSubmit = async (values, actions) => {
         const {email, password} = values
@@ -22,6 +25,7 @@ const Login = () => {
             if (res.status === 200) {
                 toast.success("Login Successful");
                 actions.resetForm();
+                await new Promise((resolve) => setTimeout(resolve, 2000));
             } else {
                 toast.error("Login Failed")
                 actions.resetForm();
@@ -34,11 +38,17 @@ const Login = () => {
     }
 
     useEffect(() => {
-        if (session) {
-            push("/profile")
+        const getUser = async () => {
+            try {
+                const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users/`);
+                setCurrentUser(res.data.data.find(user=>user.email === session?.user.email));
+                push("/profile/"+currentUser._id);
+            } catch (error) {
+                console.log(error)
+            }
         }
-
-    }, [session, push]);
+        getUser();
+    }, [session,push,currentUser])
 
 
     console.log(session)
@@ -96,5 +106,24 @@ const Login = () => {
         </div>
     );
 };
+
+export const getServerSideProps = async ({req}) => {
+    const session = await getSession({req})
+
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users/`)
+    const user = res.data?.data.find((user) => user.email === session?.user.email)
+
+    if (session && user) {
+        return {
+            redirect:{
+                destination:"/profile/"+user?._id,
+                permanent:false
+            }
+        }
+    }
+    return {
+        props:{}
+    }
+}
 
 export default Login;

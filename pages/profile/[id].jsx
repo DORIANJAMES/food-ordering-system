@@ -7,31 +7,33 @@ import Account from "@/components/profile/Account";
 import Password from "@/components/profile/Password";
 import Orders from "@/components/profile/Orders";
 import {toast} from "react-toastify";
-import {getSession, signOut, useSession} from "next-auth/react";
+import {signOut, useSession} from "next-auth/react";
 import {useRouter} from "next/router";
-import {redirect} from "next/navigation";
+import axios from "axios";
 
-const Index = () => {
+const Profile = ({user}) => {
+    console.log(user)
     const [tabs, setTabs] = useState(0);
     const {push} = useRouter();
     const {data: session} = useSession()
+
+
+
     const exitProfile = async () => {
         if (confirm("Are you sure to EXIT from your account?")) {
             signOut({redirect: false}).then(async () => {
                 toast.success("Logging out successful");
-                await new Promise((resolve) => setTimeout(resolve, 4000));
+                await new Promise((resolve) => setTimeout(resolve, 2000));
                 push("/auth/login")
             })
         }
     }
-    // getSession'ı getServerSideProps'ile aldığımızdan dolayı buna ihtiyacımız kalmadı.
-    /*useEffect(() => {
-        return () => {
-            if (!session) {
-                push("/auth/login")
-            }
-        };
-    }, [session, push]);*/
+
+    useEffect(() => {
+       if (!session) {
+           push("/auth/login")
+       }
+    }, [session, push]);
 
 
     return (
@@ -44,7 +46,7 @@ const Index = () => {
                         <Image src="/images/admin/alihan-resim.jpeg" alt="" layout="fill" objectFit="cover"
                                className="rounded-full "/>
                     </div>
-                    <Title addedClass="font-dancing text-xl">Alihan AÇIKGÖZ</Title>
+                    <Title addedClass="font-dancing text-xl">{user.fullName}</Title>
                 </div>
                 <div className="flex flex-col w-full">
                     <button className={`btn-profile ${tabs === 0 && "active"}`} onClick={() => setTabs(0)}>
@@ -66,7 +68,7 @@ const Index = () => {
                 <Title
                     addedClass="font-dancing text-4xl text-secondary">{tabs === 0 && "Account Settings"}{tabs === 1 && "Password Settings"}{tabs === 2 && "Orders"}</Title>
                 {tabs === 0 && (
-                    <Account/>
+                    <Account user={user}/>
                 )}
                 {tabs === 1 && (
                     <Password/>
@@ -81,21 +83,15 @@ const Index = () => {
     );
 };
 
-export const getServerSideProps = async ({req}) => {
-    const session = await getSession({req})
+export const getServerSideProps = async ({params}) => {
 
-    if (!session) {
-        return {
-            redirect: {
-                destination: "/auth/login",
-                permanent: false
-            }
-        }
-    }
+    const user = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users/${params.id}`)
+
     return {
-        props: {}
+        props: {
+            user: user.data.data?user.data.data:null
+        }
     }
 }
 
-
-export default Index;
+export default Profile;
