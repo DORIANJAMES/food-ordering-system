@@ -8,11 +8,8 @@ import {useRouter} from "next/router";
 const Account = ({user}) => {
     const {push} = useRouter();
     const onSubmit = async (values, actions) => {
-        /*alert(JSON.stringify(values, null, 2))
-        await new Promise((resolve) => setTimeout(resolve, 4000))*/
         try {
-            const res = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/users/${user._id}`, values);
-            push("/profile/"+user._id);
+            const res = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/users/${user._id}`, values)
         } catch (error) {
             console.log(error)
         }

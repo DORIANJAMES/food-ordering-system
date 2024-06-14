@@ -16,13 +16,15 @@ const handler = async (req, res) => {
 
     if (method === "PUT") {
         try {
-            const user = User.findByIdAndUpdate(id, req.body, {
+            const users = await User.findByIdAndUpdate(id, req.body, {
                 new: true,
             });
-            res.status(200).json({success: true, data: user});
+            res.status(200).json( {success: true, data: users});
         } catch (error) {
-            res.status(400).json({success: false, error: error.response.data.message()});
+            console.log(error)
         }
     }
+
+
 }
     export default handler;

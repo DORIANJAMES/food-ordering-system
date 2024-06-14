@@ -40,7 +40,7 @@ const Login = ({user}) => {
     useEffect(() => {
         const getUser = async () => {
             try {
-                const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users/`);
+                const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users`);
                 setCurrentUser(res.data.data.find(user=>user.email === session?.user.email));
                 push("/profile/"+currentUser._id);
             } catch (error) {
@@ -106,6 +106,8 @@ const Login = ({user}) => {
         </div>
     );
 };
+
+export const getServerSideEffects = async ({req}) => {}
 
 export const getServerSideProps = async ({req}) => {
     const session = await getSession({req})

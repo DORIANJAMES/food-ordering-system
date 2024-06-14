@@ -12,11 +12,9 @@ import {useRouter} from "next/router";
 import axios from "axios";
 
 const Profile = ({user}) => {
-    console.log(user)
     const [tabs, setTabs] = useState(0);
     const {push} = useRouter();
     const {data: session} = useSession()
-
 
 
     const exitProfile = async () => {
@@ -43,8 +41,8 @@ const Profile = ({user}) => {
                 className="flex flex-col gap-y-6 border-primary border-[1px] lg:w-96 w-100 min-h-96 text-secondary justify-between flex-shrink-0 items-center">
                 <div className="flex flex-col gap-y-6 items-center">
                     <div className="relative lg:w-52 w-48 lg:h-52 h-48 border-[1px] border-primary rounded-full mt-8">
-                        <Image src="/images/admin/alihan-resim.jpeg" alt="" layout="fill" objectFit="cover"
-                               className="rounded-full "/>
+                        <Image src={user.image ? "/images/admin/"+user.image:"/images/clients/avatar_dummy.png"} alt="" layout="fill" objectFit={user.image?"cover":"contain"}
+                               className={user.image? "rounded-full" : "p-5"}/>
                     </div>
                     <Title addedClass="font-dancing text-xl">{user.fullName}</Title>
                 </div>
