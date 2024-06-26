@@ -15,7 +15,7 @@ const Login = ({user}) => {
     const {data: session} = useSession()
     const {push} = useRouter()
     const [currentUser, setCurrentUser] = useState();
-    console.log(user)
+
 
     const onSubmit = async (values, actions) => {
         const {email, password} = values
@@ -42,7 +42,7 @@ const Login = ({user}) => {
             try {
                 const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users`);
                 setCurrentUser(res.data.data.find(user=>user.email === session?.user.email));
-                push("/profile/"+currentUser._id);
+                session && push("/profile/"+currentUser._id);
             } catch (error) {
                 console.log(error)
             }

@@ -11,10 +11,11 @@ import {signOut, useSession} from "next-auth/react";
 import {useRouter} from "next/router";
 import axios from "axios";
 
-const Profile = ({user}) => {
+const Profile = ({user,params}) => {
     const [tabs, setTabs] = useState(0);
     const {push} = useRouter();
     const {data: session} = useSession()
+    console.log(params.id)
 
 
     const exitProfile = async () => {
@@ -44,7 +45,7 @@ const Profile = ({user}) => {
                         <Image src={user.image ? "/images/admin/"+user.image:"/images/clients/avatar_dummy.png"} alt="" layout="fill" objectFit={user.image?"cover":"contain"}
                                className={user.image? "rounded-full" : "p-5"}/>
                     </div>
-                    <Title addedClass="font-dancing text-xl">{user.fullName}</Title>
+                    <Title addedClass="font-dancing text-xl">{user.fullName?user.fullName:user.name}</Title>
                 </div>
                 <div className="flex flex-col w-full">
                     <button className={`btn-profile ${tabs === 0 && "active"}`} onClick={() => setTabs(0)}>
@@ -69,7 +70,7 @@ const Profile = ({user}) => {
                     <Account user={user}/>
                 )}
                 {tabs === 1 && (
-                    <Password/>
+                    <Password user={user}/>
                 )}
                 {tabs === 2 && (
                     <Orders/>
@@ -83,11 +84,12 @@ const Profile = ({user}) => {
 
 export const getServerSideProps = async ({params}) => {
 
-    const user = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users/${params.id}`)
+    const user = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users/${params?.id}`)
 
     return {
         props: {
-            user: user.data.data?user.data.data:null
+            user: user.data.data?user.data.data:null,
+            params: params
         }
     }
 }

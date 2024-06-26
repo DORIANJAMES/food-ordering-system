@@ -3,21 +3,22 @@ import Input from "@/components/ui/Input";
 import {useFormik} from "formik";
 import {profileSchema} from "@/schema/profile";
 import axios from "axios";
-import {useRouter} from "next/router";
+//import {useRouter} from "next/router";
+import {toast} from "react-toastify";
 
-const Account = ({user}) => {
-    const {push} = useRouter();
+const Account = ({user,params}) => {
+    //const {push} = useRouter();
     const onSubmit = async (values, actions) => {
         try {
-            const res = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/users/${user._id}`, values)
+            const res = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/users/${user._id}`, values).then(()=>toast.success("Profile updated successfully."))
         } catch (error) {
-            console.log(error)
+            toast.error("An error occurred. "+error.response.data.message)
         }
 
     }
     const {values, errors, touched, handleChange, handleSubmit, handleBlur} = useFormik({
         initialValues: {
-            fullName: user?.fullName,
+            fullName: user?.fullName?user.fullName:user.name,
             email: user?.email,
             phone: user?.phone,
             address: user?.address,
@@ -27,6 +28,9 @@ const Account = ({user}) => {
         onSubmit,
         validationSchema: profileSchema,
     })
+
+
+
     const accountInputs = [
         {
             id: "account" + 1,
@@ -95,5 +99,15 @@ const Account = ({user}) => {
         </form>
     );
 };
+
+export const getServerSideProps = async ({params}) => {
+
+    return {
+        props: {
+            user: user.data.data?user.data.data:null,
+            params: params
+        }
+    }
+}
 
 export default Account;

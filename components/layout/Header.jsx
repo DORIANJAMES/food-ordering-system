@@ -54,7 +54,7 @@ const Header = () => {
                             <FaShoppingCart/>
                             {
                                 cart.products.length > 0 ?
-                                    <span className="w-4 h-4 text-secondary text-xs grid place-content-center rounded-full bg-primary absolute -top-7 -right-7 font-semibold">{cart.products.length}</span> :''
+                                    <span className="w-4 h-4 text-secondary text-xs grid place-content-center rounded-full bg-primary absolute -top-3 -right-3 font-semibold">{cart.products.length}</span> :''
                             }
                         </span>
 

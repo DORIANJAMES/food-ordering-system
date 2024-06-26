@@ -2,7 +2,6 @@ import React from 'react';
 
 const Input = (props) => {
     const {type,placeholder,touched ,errorMessage,...inputProps} = props
-    console.log(errorMessage);
     return (
         <div className="w-full">
             <label htmlFor={placeholder} className="relative block cursor-text w-full">
