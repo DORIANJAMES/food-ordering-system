@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 
-const Products = () => {
+const Products = ({switchIsProductModal}) => {
     return (
         <div>
             <div className=" flex items-center overflow-x-auto w-full border-2 border-primary rounded-md">
@@ -30,6 +30,9 @@ const Products = () => {
                     </tbody>
                 </table>
             </div>
+            <button className="bg-primary w-12 h-12 rounded-full p-0 absolute xl:top-32 top-[640px] xl:right-14 right-6"
+                    onClick={() => switchIsProductModal()}>+
+            </button>
         </div>
     );
 };

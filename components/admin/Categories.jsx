@@ -32,14 +32,16 @@ const Categories = () => {
         //setCategories((prev)=>prev.filter((cat,i) => i !== index))
         const deleted = async (id) => {
             try{
-                await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/categories/${id}`).then((res) => {
-                    if(res.status ===200) {
-                        setCategories(categories.filter((cat) => cat._id !== id))
-                        toast.success("Category deleted successfully.")
-                    } else {
-                        toast.error("An error occurred.")
-                    }
-                });
+                if (confirm("Are you sure you want to delete this category?")) {
+                    await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/categories/${id}`).then((res) => {
+                        if(res.status ===200) {
+                            setCategories(categories.filter((cat) => cat._id !== id))
+                            toast.success("Category deleted successfully.")
+                        } else {
+                            toast.error("An error occurred.")
+                        }
+                    });
+                }
             } catch (error) {
                 toast.error("An error occurred. " + error.response.data.message)
             }

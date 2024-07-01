@@ -7,12 +7,12 @@ import Reservation from "@/components/Reservation";
 import Customers from "@/components/customers/Customers";
 
 
-function Home() {
+function Home({categoryNames}) {
     return (
         <React.Fragment>
             <Carousel/>
             <Campaigns/>
-            <MenuWrapper/>
+            <MenuWrapper categoryNames={categoryNames}/>
             <About/>
             <Reservation/>
             <Customers/>

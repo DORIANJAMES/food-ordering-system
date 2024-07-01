@@ -47,7 +47,11 @@ body {
 }
 
 .btn-secondary {
-    @apply active:bg-secondary active:rounded-3xl active:text-white bg-white text-secondary px-6 py-2
+    @apply bg-white text-secondary px-6 py-2
+}
+
+.btn-secondary.active {
+    @apply bg-secondary rounded-3xl text-white px-6 py-2
 }
 
 .btn-product {
@@ -65,6 +69,7 @@ body {
 .btn-profile {
     @apply w-full text-secondary md:px-[1.875rem] px-[0.7rem] justify-start text-center items-center py-[0.5rem] cursor-pointer hover:opacity-70 hover:text-white hover:bg-primary transition-all font-sans flex gap-x-4 border-t-[1px] border-primary
 }
+
 .btn-profile.active {
     @apply w-full md:px-[1.875rem] px-[0.7rem] justify-start text-center items-center py-[0.5rem] cursor-pointer hover:opacity-70 hover:text-white hover:bg-primary transition-all font-sans flex gap-x-4 border-t-[1px] border-primary bg-primary text-white
 }
@@ -76,6 +81,10 @@ body {
 
 .searchModalContent {
     @apply text-white relative z-50 md:w-[50rem] w-[23rem] bg-secondary rounded-3xl text-center p-5
+}
+
+.addProductModalContent {
+    @apply text-white relative z-50 md:w-[50rem] w-[23rem] bg-secondary rounded-3xl p-5
 }
 
 .modalTitle {
@@ -95,7 +104,6 @@ body {
     block
     bg-white
     border
-    border-primary
     rounded-md
     py-2 pl-9 pr-3
     shadow-sm
@@ -105,6 +113,86 @@ body {
     focus:ring-1
     text-secondary
     border-primary
+}
+
+.formInput {
+    @apply
+    w-full h-[25px]
+    font-sans
+    text-[1rem]
+    placeholder:font-dancing
+    placeholder:text-[1rem]
+    placeholder:opacity-100
+    block
+    bg-white
+    border
+    rounded-md
+    px-2
+    shadow-sm
+    focus:outline-none
+    focus:border-sky-500
+    focus:ring-sky-500
+    focus:ring-1
+    text-secondary
+    border-primary
+}
+
+.formTextArea {
+    @apply
+    w-full h-[100px]
+    font-sans
+    text-[1rem]
+    placeholder:font-dancing
+    placeholder:text-[1rem]
+    placeholder:opacity-100
+    block
+    bg-white
+    border
+    rounded-md
+    py-2 px-2
+    shadow-sm
+    focus:outline-none
+    focus:border-sky-500
+    focus:ring-sky-500
+    focus:ring-1
+    text-secondary
+    border-primary
+}
+
+.formSelectBox {
+    @apply
+    w-full h-[25px]
+    font-dancing
+    text-[1rem]
+    placeholder:font-dancing
+    placeholder:text-[1rem]
+    placeholder:opacity-100
+    block
+    bg-white
+    border
+    rounded-md
+    px-2
+    shadow-sm
+    focus:outline-none
+    focus:border-sky-500
+    focus:ring-sky-500
+    focus:ring-1
+    text-secondary
+    text-opacity-60
+    border-primary
+}
+
+.modalFormPriceInput {
+    @apply
+    border-0
+    bg-transparent
+    border-b-2
+    border-primary
+    py-2
+    focus:outline-none
+    focus:border-sky-500
+    placeholder:font-dancing
+    text-[1rem]
 }
 
 .searchModalResults {

@@ -11,10 +11,16 @@ import AdminFooter from "@/components/admin/AdminFooter";
 import {useRouter} from "next/router";
 import {toast} from "react-toastify";
 import axios from "axios";
+import AddProduct from "@/components/admin/AddProduct";
 
-const Profile = () => {
+const Profile = ({categoryNames}) => {
     const {push} = useRouter();
     const [tabs, setTabs] = useState(0);
+    const [isProductModal, setIsProductModal] = useState(false)
+
+    const switchIsProductModal = () => {
+        setIsProductModal(!isProductModal);
+    }
 
     const exitAdmin = async () => {
         try {
@@ -76,7 +82,7 @@ const Profile = () => {
                 <Title
                     addedClass="font-dancing text-4xl text-secondary">{tabs === 0 && "Products"}{tabs === 1 && "Orders"}{tabs === 2 && "Categories"}{tabs === 3 && "Footer"}</Title>
                 {tabs === 0 && (
-                    <Products/>
+                    <Products switchIsProductModal={switchIsProductModal}/>
                 )}
                 {tabs === 1 && (
                     <Orders/>
@@ -88,6 +94,8 @@ const Profile = () => {
                     <AdminFooter/>
                 )}
 
+                {isProductModal && <AddProduct categoryNames={categoryNames} setIsProductModal={setIsProductModal}></AddProduct>}
+
             </div>
         </div>
     );
@@ -95,6 +103,7 @@ const Profile = () => {
 
 export const getServerSideProps = async (context) => {
     const myCookieProfile = context.req?.cookies || '';
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/categories`);
 
     if (myCookieProfile.token !== process.env.ADMIN_TOKEN) {
         return {
@@ -106,8 +115,11 @@ export const getServerSideProps = async (context) => {
     }
 
     return {
-        props: {}
+        props: {
+            categoryNames: res?.data.data ? res.data.data : [],
+        }
     }
 }
 
 export default Profile;
+

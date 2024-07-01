@@ -42,5 +42,23 @@ module.exports = {
 
         },
     },
-    plugins: [],
+    plugins: [
+        function ({ addBase, addComponents, addUtilities, e, prefix, config }) {
+            addUtilities({
+                '.no-spinner': {
+                    '-webkit-appearance': 'none',
+                    '-moz-appearance': 'textfield',
+                    'appearance': 'none'
+                },
+                '.no-spinner::-webkit-outer-spin-button': {
+                    '-webkit-appearance': 'none',
+                    'margin': 0,
+                },
+                '.no-spinner::-webkit-inner-spin-button': {
+                    '-webkit-appearance': 'none',
+                    'margin': 0,
+                },
+            })
+        }
+    ],
 };
